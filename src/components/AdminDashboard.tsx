@@ -1044,11 +1044,14 @@ export default function AdminDashboard({ profile }: AdminDashboardProps) {
                 <select
                   value={editUserPeran}
                   onChange={(e) => setEditUserPeran(e.target.value as any)}
-                  className="block w-full rounded-xl border border-slate-300 py-2.5 px-3 text-slate-800 focus:border-blue-500 bg-white"
+                  disabled={editingUser.email === 'dokumentasifip@gmail.com'}
+                  className="block w-full rounded-xl border border-slate-300 py-2.5 px-3 text-slate-800 focus:border-blue-500 bg-white disabled:bg-slate-50 disabled:text-slate-400"
                 >
                   <option value="mahasiswa">Mahasiswa</option>
                   <option value="dosen">Dosen</option>
-                  <option value="admin">Admin (Akses Seluruh Sistem)</option>
+                  {editingUser.email === 'dokumentasifip@gmail.com' && (
+                    <option value="admin">Admin (Akses Seluruh Sistem)</option>
+                  )}
                 </select>
               </div>
 
