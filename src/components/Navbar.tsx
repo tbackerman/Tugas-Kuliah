@@ -28,7 +28,7 @@ export default function Navbar({ profile, onSignOut }: NavbarProps) {
                 S
               </div>
               <span className="font-bold text-xl text-slate-800 tracking-tight">
-                Tugas Kuliah 
+                ETugas 
               </span>
             </div>
           </div>
