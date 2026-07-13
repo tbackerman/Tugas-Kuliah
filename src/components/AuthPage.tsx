@@ -150,7 +150,7 @@ export default function AuthPage({ onAuthSuccess }: AuthPageProps) {
                   <label className="block text-sm font-semibold text-slate-700 mb-1">
                     Pilih Peran Anda
                   </label>
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-2 gap-2">
                     <button
                       type="button"
                       onClick={() => setPeran('mahasiswa')}
@@ -174,18 +174,6 @@ export default function AuthPage({ onAuthSuccess }: AuthPageProps) {
                     >
                       <BookOpen className="h-4 w-4 text-blue-600" />
                       <span>Dosen</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setPeran('admin')}
-                      className={`flex flex-col sm:flex-row items-center justify-center gap-1.5 rounded-xl py-2.5 px-2 text-xs font-semibold border transition-all ${
-                        peran === 'admin'
-                          ? 'border-amber-600 bg-amber-50 text-amber-700 shadow-sm font-bold'
-                          : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
-                      }`}
-                    >
-                      <Shield className="h-4 w-4 text-amber-500" />
-                      <span>Admin</span>
                     </button>
                   </div>
                 </div>
