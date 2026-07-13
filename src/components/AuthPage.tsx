@@ -110,7 +110,7 @@ export default function AuthPage({ onAuthSuccess }: AuthPageProps) {
             <GraduationCap className="h-8 w-8" id="auth-logo" />
           </div>
           <h2 className="mt-6 text-3xl font-extrabold text-slate-800 tracking-tight">
-            TugasKuliah
+            Tugas Kuliah
           </h2>
           <p className="mt-2 text-sm text-slate-500">
             Portal Pengumpulan Tugas Mata Kuliah yang Praktis & Teratur
