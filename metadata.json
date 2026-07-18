@@ -1,6 +1,0 @@
-{
-  "name": "Pengumpulan Tugas Kuliah",
-  "description": "Aplikasi pengumpulan tugas kuliah untuk dosen dan mahasiswa, mendukung pembuatan kelas, penugasan, pengumpulan tugas, dan penilaian secara real-time.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
