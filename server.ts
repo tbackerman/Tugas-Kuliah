@@ -22,8 +22,59 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 // Initialize Firebase App for Server-side firestore updates
-const firebaseConfigPath = path.join(process.cwd(), "firebase-applet-config.json");
-const firebaseConfig = JSON.parse(fs.readFileSync(firebaseConfigPath, "utf-8"));
+let firebaseConfig: any;
+const hardcodedConfig = {
+  projectId: "gen-lang-client-0648365532",
+  appId: "1:743761611534:web:b637c9e6097af6b057255f",
+  apiKey: "AIzaSyAFzPHCF7gFQ3Sdh95e0klcxc2RzYK8JI0",
+  authDomain: "gen-lang-client-0648365532.firebaseapp.com",
+  storageBucket: "gen-lang-client-0648365532.firebasestorage.app",
+  messagingSenderId: "743761611534",
+  measurementId: "G-FZHVWY1E2L",
+  oAuthClientId: "743761611534-fu7uf27bssemaoqq6q06aljflhq2hl5o.apps.googleusercontent.com",
+  recaptchaSiteKey: ""
+};
+
+try {
+  const possiblePaths = [
+    path.join(process.cwd(), "firebase-applet-config.json"),
+    path.join(process.cwd(), "../firebase-applet-config.json"),
+    path.join(process.cwd(), "api", "firebase-applet-config.json"),
+  ];
+
+  let configText = "";
+  for (const p of possiblePaths) {
+    if (fs.existsSync(p)) {
+      configText = fs.readFileSync(p, "utf-8");
+      break;
+    }
+  }
+
+  if (configText) {
+    firebaseConfig = JSON.parse(configText);
+  } else {
+    // Attempt fallback via module resolution if available
+    try {
+      const __filename = fileURLToPath(import.meta.url);
+      const __dirname = path.dirname(__filename);
+      const fallbackPath1 = path.join(__dirname, "firebase-applet-config.json");
+      const fallbackPath2 = path.join(__dirname, "..", "firebase-applet-config.json");
+      if (fs.existsSync(fallbackPath1)) {
+        firebaseConfig = JSON.parse(fs.readFileSync(fallbackPath1, "utf-8"));
+      } else if (fs.existsSync(fallbackPath2)) {
+        firebaseConfig = JSON.parse(fs.readFileSync(fallbackPath2, "utf-8"));
+      } else {
+        firebaseConfig = hardcodedConfig;
+      }
+    } catch {
+      firebaseConfig = hardcodedConfig;
+    }
+  }
+} catch (e) {
+  console.warn("Fell back to hardcoded Firebase configuration:", e);
+  firebaseConfig = hardcodedConfig;
+}
+
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp, "ai-studio-41e3c325-1ef7-4c09-899c-24b354095751");
 
