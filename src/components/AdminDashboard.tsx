@@ -107,14 +107,17 @@ export default function AdminDashboard({ profile }: AdminDashboardProps) {
   const fetchDriveConfig = async () => {
     try {
       const res = await fetch('/api/drive/config');
+      const responseText = await res.text();
       if (res.ok) {
-        const data = await res.json();
+        const data = JSON.parse(responseText);
         setDriveConfig(data);
         if (data.connected && data.clientId) {
           setClientIdInput(data.clientId);
         } else if (!data.connected && data.suggestedClientId) {
           setClientIdInput(data.suggestedClientId);
         }
+      } else {
+        console.error("Gagal mengambil konfigurasi Google Drive. Status:", res.status, responseText);
       }
     } catch (e) {
       console.error("Gagal mengambil konfigurasi Google Drive:", e);
@@ -136,7 +139,15 @@ export default function AdminDashboard({ profile }: AdminDashboardProps) {
         })
       });
 
-      const data = await res.json();
+      const responseText = await res.text();
+      let data: any;
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error("Gagal mengurai respons JSON:", responseText, parseError);
+        throw new Error(`Respons server bukan JSON (Status: ${res.status} ${res.statusText}). Isi respons: ${responseText.slice(0, 150)}`);
+      }
+
       if (res.ok && data.success) {
         setDriveMessage({
           type: 'success',
@@ -151,10 +162,11 @@ export default function AdminDashboard({ profile }: AdminDashboardProps) {
           text: data.error || 'Gagal menghubungkan Google Drive.'
         });
       }
-    } catch (e) {
+    } catch (e: any) {
+      console.error("Kesalahan koneksi Drive:", e);
       setDriveMessage({
         type: 'error',
-        text: 'Kesalahan saat menghubungkan Google Drive. Pastikan kredensial benar dan coba lagi.'
+        text: `Kesalahan saat menghubungkan Google Drive: ${e?.message || e || 'Koneksi gagal'}. Silakan periksa kredensial Anda dan coba lagi.`
       });
     } finally {
       setIsDriveConnecting(false);
@@ -178,7 +190,15 @@ export default function AdminDashboard({ profile }: AdminDashboardProps) {
         })
       });
 
-      const data = await res.json();
+      const responseText = await res.text();
+      let data: any;
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error("Gagal mengurai respons JSON:", responseText, parseError);
+        throw new Error(`Respons server bukan JSON (Status: ${res.status} ${res.statusText}).`);
+      }
+
       if (res.ok && data.success) {
         setDriveMessage({
           type: 'success',
@@ -191,10 +211,11 @@ export default function AdminDashboard({ profile }: AdminDashboardProps) {
           text: data.error || 'Gagal menyimpan kredensial.'
         });
       }
-    } catch (e) {
+    } catch (e: any) {
+      console.error("Kesalahan menyimpan kredensial:", e);
       setDriveMessage({
         type: 'error',
-        text: 'Terjadi kesalahan saat menghubungkan.'
+        text: `Terjadi kesalahan saat menyimpan kredensial: ${e?.message || e || 'Koneksi gagal'}`
       });
     } finally {
       setIsSavingCredentials(false);
